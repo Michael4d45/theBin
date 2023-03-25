@@ -9,8 +9,9 @@ RUN chown www-data:www-data /var/www/app
 
 FROM base as local
 WORKDIR /var/www/app
-USER www-data
 COPY entrypoint.dev.sh /tmp
+RUN chmod +x /tmp/entrypoint.dev.sh
+USER www-data
 CMD ["/tmp/entrypoint.dev.sh"]
 
 # `docker build --target prod --tag the-bin:1.0.0 .`
