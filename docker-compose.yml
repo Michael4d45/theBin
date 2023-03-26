@@ -55,6 +55,16 @@ services:
     volumes:
       - ./src:/var/www/app
 
+  node:
+    image: node:lts-alpine
+    container_name: the-bin-node
+    env_file:
+      - ./.env
+    volumes:
+      - ./src:/var/www/app
+    working_dir: /var/www/app
+    entrypoint: sh -c 'npm install && if [ "$APP_ENV" = "production" ]; then npm run build; else npm run dev; fi;'
+
   # ---- Redis Single for Local Development ----
   redis:
     platform: linux/amd64
