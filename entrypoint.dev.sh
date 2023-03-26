@@ -4,14 +4,10 @@ set -Ee
 echo "Dev Entrypoint Script Started"
 
 # Generating the autoloader takes forever, even when no packages are installed.
-# if [ ! -f "vendor/autoload.php" ] ; then
-#     echo "composer install"
-#     composer install
-# fi
-
-echo "installing composer packages"
-
-composer install
+if [ ! -f "vendor/autoload.php" ] ; then
+    echo "composer install"
+    composer install
+fi
 
 echo "seeding database"
 
