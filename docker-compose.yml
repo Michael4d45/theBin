@@ -74,6 +74,8 @@ services:
       - network
     volumes:
       - ./src:/var/www/app
+    ports:
+      - 5173:5173
     working_dir: /var/www/app
     entrypoint: sh -c 'npm install && if [ "$APP_ENV" = "production" ]; then npm run build; else npm run dev; fi;'
 
