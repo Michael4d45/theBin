@@ -20,7 +20,7 @@ services:
       MYSQL_TCP_PORT: ${DB_PORT}
 
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - ${DB_PORT}:${DB_PORT}
     volumes:
       - mysql_the_bin:/var/lib/mysql
     networks:
@@ -31,16 +31,18 @@ services:
     container_name: the-bin-nginx
     environment:
       - PHP_ENDPOINT=the-bin-php
+      - NODE_ENDPOINT=the-bin-node
     depends_on:
       php:
+        condition: service_started
+      node:
         condition: service_started
     networks:
       - network
     ports:
-      - "8080:8080"
-    # only the presence of index.php is needed, it's never executed: don't need the rest of src/
+      - 8080:8080
     volumes:
-      - ./config/nginx/nginx.conf.template:/etc/nginx/templates/default.conf.template
+      - ./config/nginx/nginx.${APP_ENV}.conf.template:/etc/nginx/templates/default.conf.template
 
   php:
     image: the-bin-php:development
@@ -60,8 +62,12 @@ services:
     container_name: the-bin-node
     env_file:
       - ./.env
+    networks:
+      - network
     volumes:
       - ./src:/var/www/app
+    ports:
+      - 5173:5173
     working_dir: /var/www/app
     entrypoint: sh -c 'npm install && if [ "$APP_ENV" = "production" ]; then npm run build; else npm run dev; fi;'
 

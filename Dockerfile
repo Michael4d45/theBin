@@ -15,7 +15,7 @@ USER www-data
 CMD ["/tmp/entrypoint.dev.sh"]
 
 # `docker build --target prod --tag the-bin:1.0.0 .`
-FROM base as prod
+FROM base as production
 WORKDIR /var/www/app
 COPY src/ .
 RUN chown -R www-data:www-data /var/www/app
